@@ -1,79 +1,88 @@
-import { useState } from "react";
-import { StyleSheet, View, Button, TextInput, FlatList } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import GoalItem from "./components/GoalItem";
-import GoalInput from "./components/GoalInput";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons } from "@expo/vector-icons";
+import ManageExpense from "./screens/ManageExpense";
+import RecentExpenses from "./screens/RecentExpenses";
+import AllExpenses from "./screens/AllExpenses";
+import { GlobalStyles } from "./constants/styles";
+import IconButton from "./components/UI/IconButton";
 
-export default function App() {
-  const [courseGoals, setCourseGoals] = useState([]);
-  const [modalIsVisible, setModalIsVisible] = useState(false);
+const Stack = createNativeStackNavigator();
+const BottomTabs = createBottomTabNavigator();
 
-  function startAddGoalHandler() {
-    setModalIsVisible(true);
-  }
-
-  function endAddGoalHandler() {
-    setModalIsVisible(false);
-  }
-
-  function addGoalHandler(enteredGoalText) {
-    setCourseGoals((prev) => {
-      return [...prev, { text: enteredGoalText, id: Math.random().toString() }];
-    });
-    endAddGoalHandler();
-  }
-
-  function deleteGoalHandler(deletedItemId) {
-    setCourseGoals((prevGoals) => {
-      return prevGoals.filter((goal) => goal.id !== deletedItemId);
-    });
-  }
-
+function ExepnsesOverview() {
   return (
-    <>
-      <StatusBar style='light' />
-      <View style={styles.appContainer}>
-        <Button
-          title="Add New Goal"
-          color="#a065ec"
-          onPress={startAddGoalHandler}
-        />
-        {modalIsVisible && (
-          <GoalInput
-            onAddGoal={addGoalHandler}
-            onCancel={endAddGoalHandler}
-            visible={modalIsVisible}
-          />
-        )}
-        <View style={styles.goalsContainer}>
-          <FlatList
-            data={courseGoals}
-            renderItem={(itemData) => (
-              <GoalItem
-                text={itemData.item.text}
-                id={itemData.item.id}
-                onDeleteItem={deleteGoalHandler}
-              />
-            )}
-            keyExtractor={(item, index) => {
-              return item.id;
+    <BottomTabs.Navigator
+      screenOptions={({ navigation }) => ({
+        headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
+        headerTintColor: "white",
+        tabBarStyle: { backgroundColor: GlobalStyles.colors.primary500 },
+        tabBarActiveTintColor: GlobalStyles.colors.accent500,
+        headerRight: ({ tintColor }) => (
+          <IconButton
+            icon="add"
+            size={24}
+            color={tintColor}
+            onPress={() => {
+              navigation.navigate("ManageExpense");
             }}
-            alwaysBounceVertical={false}
           />
-        </View>
-      </View>
-    </>
+        ),
+      })}
+    >
+      <BottomTabs.Screen
+        name="RecentExpenses"
+        component={RecentExpenses}
+        options={{
+          title: "Recent Expenses",
+          tabBarLabel: "Recent",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="hourglass" size={size} color={color} />
+          ),
+        }}
+      />
+      <BottomTabs.Screen
+        name="AllExpenses"
+        component={AllExpenses}
+        options={{
+          title: "All Expenses",
+          tabBarLabel: "All Expenses",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="calendar" size={size} color={color} />
+          ),
+        }}
+      />
+    </BottomTabs.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  appContainer: {
-    flex: 1,
-    paddingTop: 60,
-    paddingHorizontal: 16,
-    backgroundColor: "#1e085a",
-  },
-  goalsContainer: {
-    flex: 4,
-  },
-});
+export default function App() {
+  return (
+    <>
+      <StatusBar style="auto" />
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
+            headerTintColor: "white",
+          }}
+        >
+          <Stack.Screen
+            name="ExpensesOverview"
+            component={ExepnsesOverview}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ManageExpense"
+            component={ManageExpense}
+            options={{
+              presentation: "modal",
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
+  );
+}
