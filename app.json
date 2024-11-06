@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "native-app-2",
-    "slug": "native-app-2",
+    "name": "notifications-app",
+    "slug": "notifications-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,7 +16,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany234.yourappname"
     },
     "android": {
       "adaptiveIcon": {
@@ -26,6 +27,22 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./local/assets/icon.png",
+          "color": "#ffffff",
+          "defaultChannel": "default"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "a4e91228-c9d4-4daf-a94a-33c729ff1b21"
+      }
+    },
+    "owner": "andrew2263"
   }
 }

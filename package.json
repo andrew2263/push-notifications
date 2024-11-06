@@ -1,5 +1,5 @@
 {
-  "name": "native-app-2",
+  "name": "native-app-22233",
   "version": "1.0.0",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
@@ -13,7 +13,9 @@
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
     "axios": "^1.7.7",
-    "expo": "~50.0.17",
+    "expo": "51.0.38",
+    "expo-dev-client": "~3.3.12",
+    "expo-notifications": "^0.28.19",
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
     "react-native": "0.73.6",
